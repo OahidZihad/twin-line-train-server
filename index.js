@@ -31,6 +31,12 @@ client.connect((err) => {
       res.send(result.insertedId);
     });
   });
+
+  app.get("/tickets", (req, res) => {
+    ticketCollection.find({}).toArray((err, documents) => {
+      res.send(documents);
+    });
+  });
   //   client.close();
 });
 
