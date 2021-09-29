@@ -9,6 +9,10 @@ app.use(bodyParser.json());
 
 const fs = require("fs-extra");
 
+const fileUpload = require("express-fileupload");
+app.use(express.static("admin"));
+app.use(fileUpload());
+
 require("dotenv").config();
 
 const port = 4000;
@@ -52,6 +56,32 @@ client.connect((err) => {
 
   app.get("/lostItems", (req, res) => {
     lostAndFoundCollection.find({}).toArray((err, documents) => {
+      res.send(documents);
+    });
+  });
+
+  app.post("/addAdmin", (req, res) => {
+    const file = req.files.file;
+    const name = req.body.name;
+    const email = req.body.email;
+    const newImg = req.files.file.data;
+    const encImg = newImg.toString("base64");
+
+    var image = {
+      contentType: req.files.file.mimetype,
+      size: req.files.file.size,
+      img: Buffer.from(encImg, "base64"),
+    };
+
+    adminCollection
+      .insertOne({ name: name, email: email, image })
+      .then((result) => {
+        res.send(result.insertedId);
+      });
+  });
+
+  app.get("/admins", (req, res) => {
+    adminCollection.find({}).toArray((err, documents) => {
       res.send(documents);
     });
   });
