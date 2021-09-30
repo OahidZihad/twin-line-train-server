@@ -85,6 +85,30 @@ client.connect((err) => {
       res.send(documents);
     });
   });
+
+  app.post("/ticketsByDate", (req, res) => {
+    const date = req.body;
+    const email = req.body.email;
+    // console.log("date email", date);
+    adminCollection.find({ email: email }).toArray((err, admins) => {
+      // console.log("admins", admins);
+      const filter = { date: date.date };
+      if (admins.length === 0) {
+        filter.email = email;
+        console.log("filter", filter);
+      }
+      ticketCollection.find(filter).toArray((err, documents) => {
+        //ei line a find(filter) bosale todays patient a kono data show kore na....
+        // abar find({ date: date.date }) bosale todays patient a data show kore button
+        // localhost:5000/dashboard/appointment a data filter hoye ase na... sob datai show kore
+        // jodio seta doctor er mail diye dhukleo
+        // console.log(email, date.date, doctors, documents);
+        console.log(documents);
+        res.send(documents);
+      });
+    });
+  });
+
   //   client.close();
 });
 
