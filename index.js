@@ -35,7 +35,7 @@ client.connect((err) => {
   app.post("/addTicket", (req, res) => {
     const ticket = req.body;
     ticketCollection.insertOne(ticket).then((result) => {
-      console.log(result);
+      // console.log(result);
       res.send(result.insertedId);
     });
   });
@@ -49,7 +49,7 @@ client.connect((err) => {
   app.post("/lostAndFound", (req, res) => {
     const lostFound = req.body;
     lostAndFoundCollection.insertOne(lostFound).then((result) => {
-      console.log("result result", result);
+      // console.log("result result", result);
       res.send(result.insertedId);
     });
   });
@@ -95,7 +95,7 @@ client.connect((err) => {
       const filter = { date: date.date };
       if (admins.length === 0) {
         filter.email = email;
-        console.log("filter", filter);
+        // console.log("filter", filter);
       }
       ticketCollection.find(filter).toArray((err, documents) => {
         //ei line a find(filter) bosale todays patient a kono data show kore na....
@@ -103,9 +103,16 @@ client.connect((err) => {
         // localhost:5000/dashboard/appointment a data filter hoye ase na... sob datai show kore
         // jodio seta doctor er mail diye dhukleo
         // console.log(email, date.date, doctors, documents);
-        console.log(documents);
+        // console.log(documents);
         res.send(documents);
       });
+    });
+  });
+
+  app.post("/isAdmin", (req, res) => {
+    const email = req.body.email;
+    adminCollection.find({ email: email }).toArray((err, admins) => {
+      res.send(admins.length > 0);
     });
   });
 
