@@ -29,6 +29,7 @@ client.connect((err) => {
     .db("twinLine")
     .collection("lostAndFound");
   const adminCollection = client.db("twinLine").collection("admin");
+  const stripeCollection = client.db("twinLine").collection("stripe");
 
   console.log("database connected");
 
@@ -115,6 +116,14 @@ client.connect((err) => {
       res.send(admins.length > 0);
     });
   });
+
+  /////////// try to post payment data on server
+  // app.post("/addStripeData", (req, res) => {
+  //   const stripeData = req.body;
+  //   stripeCollection.insertOne(stripeData).then((result) => {
+  //     res.send(result.insertedId);
+  //   });
+  // });
 
   //   client.close();
 });
