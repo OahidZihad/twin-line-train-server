@@ -18,18 +18,28 @@ require("dotenv").config();
 const port = 4000;
 
 const { MongoClient } = require("mongodb");
-const uri = `mongodb+srv://metroRail:valarmorgulis@cluster0.zeznz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+// const uri = `mongodb+srv://metroRail:valarmorgulis@cluster0.zeznz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.zeznz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 client.connect((err) => {
-  const ticketCollection = client.db("twinLine").collection("getTickets");
+  const ticketCollection = client
+    .db(`${process.env.DB_NAME}`)
+    .collection("getTickets");
+
   const lostAndFoundCollection = client
-    .db("twinLine")
+    .db(`${process.env.DB_NAME}`)
     .collection("lostAndFound");
-  const adminCollection = client.db("twinLine").collection("admin");
-  const stripeCollection = client.db("twinLine").collection("stripe");
+
+  const adminCollection = client
+    .db(`${process.env.DB_NAME}`)
+    .collection("admin");
+
+  const stripeCollection = client
+    .db(`${process.env.DB_NAME}`)
+    .collection("stripe");
 
   console.log("database connected");
 
